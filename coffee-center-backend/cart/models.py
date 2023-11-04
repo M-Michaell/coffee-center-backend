@@ -18,7 +18,6 @@ class CartItem(models.Model):
 class Discount(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
-    discount_percent = models.FloatField()
     active = models.BooleanField(default=False)
     product=models.ForeignKey(Product,on_delete=models.CASCADE,related_name="product_discounts")
     created_at = models.DateTimeField(auto_now_add=True)
