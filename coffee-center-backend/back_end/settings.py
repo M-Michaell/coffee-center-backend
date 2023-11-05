@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'product.apps.ProductConfig',
     'order.apps.OrderConfig',
     'accounts.apps.AccountsConfig',
+    'django_cleanup.apps.CleanupConfig',
+    'rest_framework',
     
     "debug_toolbar",
 ]
