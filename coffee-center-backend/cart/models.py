@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import CustomUser
 from product.models import Product
 from accounts.models import CustomUser
 
@@ -14,12 +15,3 @@ class CartItem(models.Model):
     quantity = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-
-class Discount(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-    active = models.BooleanField(default=False)
-    product=models.ForeignKey(Product,on_delete=models.CASCADE,related_name="product_discounts")
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField(auto_now=True)

@@ -1,7 +1,4 @@
 from django.db import models
-# from cart.models import Discount
-from cart.models import Discount
-
 # Create your models here.
 
 
@@ -47,23 +44,39 @@ class RoastingDegree(models.Model):
         return f'{self.name}'
 
 
+class Discount(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    percentage = models.FloatField()
+    active = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(auto_now=True)
+
+
+
 class Product(models.Model):
     name = models.CharField(max_length=50, unique=True)
     desc = models.TextField()
     image = models.ImageField(upload_to='product/images')
     quantity = models.IntegerField()
-    #discount = models.ForeignKey(Discount, on_delete=models.CASCADE, related_name="product_discount")
     price = models.DecimalField(max_digits=6, decimal_places=2)
     discount = models.ForeignKey(Discount, on_delete=models.CASCADE, related_name="product_discount")
-    coffee_type = models.ForeignKey(CoffeeType, on_delete=models.CASCADE, related_name="product_coffe_type", related_name="product_coffe_type")
-    caffeine = models.ForeignKey(Caffeine, on_delete=models.CASCADE, related_name="product_caffeine", related_name="product_caffeine")
-    creator = models.ForeignKey(Creator, on_delete=models.CASCADE, related_name="product_creator", related_name="product_creator")
-    origin = models.ForeignKey(Origin, on_delete=models.CASCADE, related_name="product_origin", related_name="product_origin")
-    roasting_degree = models.ForeignKey(RoastingDegree, on_delete=models.CASCADE, related_name="product_roasting_degree", related_name="product_roasting_degree")
+    coffee_type = models.ForeignKey(CoffeeType, on_delete=models.CASCADE, related_name="product_coffe_type")
+    caffeine = models.ForeignKey(Caffeine, on_delete=models.CASCADE, related_name="product_caffeine")
+    creator = models.ForeignKey(Creator, on_delete=models.CASCADE, related_name="product_creator")
+    origin = models.ForeignKey(Origin, on_delete=models.CASCADE, related_name="product_origin")
+    roasting_degree = models.ForeignKey(RoastingDegree, on_delete=models.CASCADE, related_name="product_roasting_degree")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.name}'
-
+    
+    def price_after_discount(self):
+        if self.discount.active:
+            new_price=float(self.price)*((100-self.discount.percentage)/100)
+        else:
+            new_price=self.price
+        return new_price
 

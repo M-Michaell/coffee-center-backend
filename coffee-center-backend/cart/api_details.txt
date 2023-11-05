@@ -1,0 +1,11 @@
+# Create a new shopping session with associated cart items: Send a POST request to /shopping-sessions/.
+
+# Update a shopping session and associated cart items: Send a PUT request to /shopping-sessions/{session_id}/.
+
+# Get a shopping session with associated cart items: Send a GET request to /shopping-sessions/{session_id}/.
+
+# Delete a specific cart item: Send a DELETE request to /shopping-sessions/{session_id}/cart-items/{cart_item_id}/.
+
+
+shopping-sessions/<int:pk>/empty-cart-items/ to empty the cart items
+shopping-sessions/<int:pk>/delete-session/ to delete the session

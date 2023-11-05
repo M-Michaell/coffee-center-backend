@@ -42,11 +42,7 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'order.apps.OrderConfig',
     'rest_framework',
-
     'django_cleanup.apps.CleanupConfig',
-    'rest_framework',
-
-    
     "debug_toolbar",
 ]
 
