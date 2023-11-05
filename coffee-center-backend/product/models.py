@@ -1,5 +1,5 @@
 from django.db import models
-# from cart.models import Discount
+from cart.models import Discount
 
 # Create your models here.
 
