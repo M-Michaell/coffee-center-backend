@@ -45,6 +45,8 @@ INSTALLED_APPS = [
 
     'django_cleanup.apps.CleanupConfig',
     'rest_framework',
+
+    
     "debug_toolbar",
 ]
 
