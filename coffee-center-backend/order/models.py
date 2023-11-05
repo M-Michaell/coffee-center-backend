@@ -1,4 +1,6 @@
 from django.db import models
+from accounts.models import CustomUser
+from product.models import Product
 
 # Create your models here.
 
@@ -10,9 +12,9 @@ class OrderDetail(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     
     # foreign keys:
-    user_id = models.IntegerField()
+    user_id = models.ForeignKey(CustomUser,null=True,blank=True,on_delete=models.CASCADE,related_name='order_details')
+    
 
-    #You can use fields order_items and payment_details in view and html
 
 
 
@@ -29,7 +31,7 @@ class OrderItem(models.Model):
 
     # foreign keys:
     order_id = models.ForeignKey(OrderDetail,null=True,blank=True,on_delete=models.CASCADE,related_name='order_items')
-    product_id = models.IntegerField()
+    product_id = models.ForeignKey(Product,on_delete=models.CASCADE,related_name='order_items')
 
 
 
