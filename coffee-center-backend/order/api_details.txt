@@ -1,0 +1,66 @@
+orders: /order/orders
+GET : '/'
+
+POST : '/'
+{
+    "user": 1,
+    "payment_method_id": 6,
+    "total": 3
+    
+}
+
+PUT : '/id/'
+{
+    "user": 1,
+    "payment_method_id": 5,
+    "total": 3
+    
+}
+
+DELETE : '/id/'
+
+
+
+**********************************************************************************************
+
+
+payments: /order/payments
+GET : '/'
+
+POST : '/'
+{
+    "amount": 7000,
+    "provider": "Visa Card",
+    "status": "NP"
+}
+
+PUT : '/id/'
+{
+    "amount": 5000,
+    "provider": "Visa Card",
+    "status": "P"
+}
+
+DELETE : '/id/'
+
+**********************************************************************************************
+
+
+items: /order/items
+GET : '/'
+
+POST : '/'
+{
+    "product": 1,
+    "quantity": 4,
+    "order": 3
+}
+
+PUT : '/id/'
+{
+    "product": 1,
+    "quantity": 2,
+    "order": 3
+}
+
+DELETE : '/id/'
