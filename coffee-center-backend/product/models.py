@@ -1,4 +1,5 @@
 from django.db import models
+# from cart.models import Discount
 from cart.models import Discount
 
 # Create your models here.
@@ -51,13 +52,14 @@ class Product(models.Model):
     desc = models.TextField()
     image = models.ImageField(upload_to='product/images')
     quantity = models.IntegerField()
+    #discount = models.ForeignKey(Discount, on_delete=models.CASCADE, related_name="product_discount")
     price = models.DecimalField(max_digits=6, decimal_places=2)
     discount = models.ForeignKey(Discount, on_delete=models.CASCADE, related_name="product_discount")
-    coffee_type = models.ForeignKey(CoffeeType, on_delete=models.CASCADE, related_name="product_coffe_type")
-    caffeine = models.ForeignKey(Caffeine, on_delete=models.CASCADE, related_name="product_caffeine")
-    creator = models.ForeignKey(Creator, on_delete=models.CASCADE, related_name="product_creator")
-    origin = models.ForeignKey(Origin, on_delete=models.CASCADE, related_name="product_origin")
-    roasting_degree = models.ForeignKey(RoastingDegree, on_delete=models.CASCADE, related_name="product_roasting_degree")
+    coffee_type = models.ForeignKey(CoffeeType, on_delete=models.CASCADE, related_name="product_coffe_type", related_name="product_coffe_type")
+    caffeine = models.ForeignKey(Caffeine, on_delete=models.CASCADE, related_name="product_caffeine", related_name="product_caffeine")
+    creator = models.ForeignKey(Creator, on_delete=models.CASCADE, related_name="product_creator", related_name="product_creator")
+    origin = models.ForeignKey(Origin, on_delete=models.CASCADE, related_name="product_origin", related_name="product_origin")
+    roasting_degree = models.ForeignKey(RoastingDegree, on_delete=models.CASCADE, related_name="product_roasting_degree", related_name="product_roasting_degree")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
