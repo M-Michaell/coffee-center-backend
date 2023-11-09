@@ -61,7 +61,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to='product/images')
     quantity = models.IntegerField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    discount = models.ForeignKey(Discount, on_delete=models.CASCADE, related_name="product_discount")
+    discount = models.ForeignKey(Discount, on_delete=models.SET_DEFAULT,default=0, related_name="product_discount")
     coffee_type = models.ForeignKey(CoffeeType, on_delete=models.CASCADE, related_name="product_coffe_type")
     caffeine = models.ForeignKey(Caffeine, on_delete=models.CASCADE, related_name="product_caffeine")
     creator = models.ForeignKey(Creator, on_delete=models.CASCADE, related_name="product_creator")
