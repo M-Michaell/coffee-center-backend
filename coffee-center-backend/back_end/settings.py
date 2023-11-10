@@ -60,6 +60,14 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
+CORS_ORIGIN_ALLOW_ALL = True
+
 ROOT_URLCONF = 'back_end.urls'
 CORS_ALLOW_ALL_ORIGINS = True 
 TEMPLATES = [
