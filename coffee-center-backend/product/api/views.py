@@ -12,7 +12,7 @@ def product_list(request):
     if request.method == 'GET':
         product = Product.objects.all()
         serializers = ProductSerializer(product, many=True)
-        return Response(serializers.data)
+        return Response({"list":serializers.data})
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         serializers = ProductSerializer(data=data)
