@@ -53,6 +53,9 @@ class Discount(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 
 class Product(models.Model):
