@@ -7,7 +7,7 @@ class CustomUserSerializer(serializers.Serializer):
   username = serializers.CharField(max_length=100,validators=[UniqueValidator(queryset=CustomUser.objects.all())])
   first_name = serializers.CharField(max_length=100)
   last_name = serializers.CharField(max_length=100, required=False)
-  password = serializers.CharField(max_length=100, write_only=True)
+  password = serializers.CharField(max_length=100)
   email = serializers.EmailField()
   phone = serializers.CharField(max_length=12, default=0)
   created_at = serializers.DateTimeField(read_only=True)
