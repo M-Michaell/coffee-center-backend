@@ -13,11 +13,27 @@ class OrderDetail(models.Model):
     def get_all_data(cls):
         return cls.objects.all()
 
+
+
+
+
+# class OrderItem(models.Model):
+#     quantity = models.IntegerField()
+#     order = models.ForeignKey(OrderDetail, on_delete=models.CASCADE, related_name='order_items')
+    
+#     product = models.OneToOneField(Product, null=True, blank=True, on_delete=models.CASCADE, related_name='order_item_details')
+
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     modified_at = models.DateTimeField(auto_now=True)
+
+#     @classmethod
+#     def get_all_data(cls):
+#         return cls.objects.all()
+
 class OrderItem(models.Model):
     quantity = models.IntegerField()
     order = models.ForeignKey(OrderDetail, on_delete=models.CASCADE, related_name='order_items')
-    # product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='order_items')
-    product = models.OneToOneField('Product', null=True, blank=True, on_delete=models.CASCADE, related_name='order_items')
+    product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.CASCADE, related_name='order_items_details')
 
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
@@ -25,6 +41,11 @@ class OrderItem(models.Model):
     @classmethod
     def get_all_data(cls):
         return cls.objects.all()
+
+
+
+
+
 
 class PaymentDetail(models.Model):
     status_choices = [
