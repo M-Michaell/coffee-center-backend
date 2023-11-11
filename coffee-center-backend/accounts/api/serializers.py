@@ -9,7 +9,7 @@ class CustomUserSerializer(serializers.Serializer):
   last_name = serializers.CharField(max_length=100, required=False)
   password = serializers.CharField(max_length=100)
   email = serializers.EmailField()
-  phone = serializers.CharField(max_length=12, default=0)
+  phone = serializers.CharField(max_length=13, default=0)
   created_at = serializers.DateTimeField(read_only=True)
   modified_at = serializers.DateTimeField(read_only=True)
 

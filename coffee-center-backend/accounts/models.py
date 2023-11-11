@@ -7,7 +7,7 @@ class CustomUser(AbstractUser):
     last_name=  models.CharField(max_length=100, null=True)
     password= models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    phone = models.CharField(max_length=12, default=0)
+    phone = models.CharField(max_length=13, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
