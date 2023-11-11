@@ -107,13 +107,10 @@ class ShoppingSessionViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['delete'])
     def delete_cart_item(self, request, pk=None):
-        print("request" ,request.data)
         session_id = pk
-        print(request.data)
-        product_id = request.data.get('product_id')
-        print(product_id)
-
-
+        product=request.data["product"]
+        product_id = json.loads(product)["id"]
+        
         shopping_session = get_object_or_404(ShoppingSession, id=session_id)
         cart_item = get_object_or_404(CartItem, session=shopping_session, product_id=product_id)
 
@@ -128,3 +125,7 @@ class ShoppingSessionViewSet(viewsets.ModelViewSet):
             shopping_session.save()
 
         return Response({'detail': 'Cart item deleted successfully.', 'total': total}, status=status.HTTP_204_NO_CONTENT)
+    
+
+
+    
