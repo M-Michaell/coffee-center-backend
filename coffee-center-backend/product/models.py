@@ -60,10 +60,10 @@ class Discount(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=50, unique=True)
-    desc = models.TextField()
+    desc = models.TextField(max_length=90)
     image = models.ImageField(upload_to='product/images')
     quantity = models.IntegerField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField(max_digits=4, decimal_places=1)
     discount = models.ForeignKey(Discount, on_delete=models.SET_DEFAULT,default=0, related_name="product_discount")
     coffee_type = models.ForeignKey(CoffeeType, on_delete=models.CASCADE, related_name="product_coffe_type")
     caffeine = models.ForeignKey(Caffeine, on_delete=models.CASCADE, related_name="product_caffeine")
