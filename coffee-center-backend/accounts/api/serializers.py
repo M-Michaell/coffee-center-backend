@@ -71,4 +71,3 @@ class UserPaymentSerializer(serializers.Serializer):
       instance.expiry = validated_data.get('expiry')
       instance.save()
       return instance
-

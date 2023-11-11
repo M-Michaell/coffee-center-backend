@@ -106,3 +106,61 @@ def userPayment_resource(request, id):
   elif request.method == 'DELETE':
     userPayment.delete()
     return Response({'message': 'User deleted via api'}, status= 204)
+  
+
+
+
+# Modify your user login view or authentication logic
+
+from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from cart.models import ShoppingSession
+from cart.serializers import ShoppingSessionSerializer
+from django.contrib.auth import authenticate
+from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+@csrf_exempt
+def user_login(request):
+  email = request.data.get('email')
+  print("email",email)
+  password = request.data.get('password')
+  print("password",password)
+
+  user = authenticate(request, email=email, password=password)
+
+  if user:
+    print("Authenticated user:", user.username)
+    login(request, user)
+
+    # Get or create shopping session for the user
+    shopping_session, created = ShoppingSession.objects.get_or_create(user=user)
+
+    # Get user's addresses
+    addresses = User_Address.objects.filter(user=user)
+    address_serializers = [UserAddressSerializer(address).data for address in addresses]
+
+    # Get user's payments
+    payments = User_Payment.objects.filter(user=user)
+    payment_serializers = [UserPaymentSerializer(payment).data for payment in payments]
+
+    # Serialize user and session data
+    user_serializer = CustomUserSerializer(user)
+    session_serializer = ShoppingSessionSerializer(shopping_session)
+
+    return JsonResponse({
+        'user': user_serializer.data,
+        'session': session_serializer.data,
+        'addresses': address_serializers,
+        'payments': payment_serializers,
+    })
+  else:
+      print("Authentication failed")
+      return JsonResponse({'error': 'Invalid credentials'}, status=400)

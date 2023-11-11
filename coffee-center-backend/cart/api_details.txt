@@ -9,3 +9,12 @@
 
 shopping-sessions/<int:pk>/empty-cart-items/ to empty the cart items
 shopping-sessions/<int:pk>/delete-session/ to delete the session
+
+
+
+
+GET /api/cart/shopping-sessions/{session_id}/get-cart-data/
+POST /api/cart/shopping-sessions/{session_id}/empty-cart-items/
+POST /api/cart/shopping-sessions/{session_id}/add-to-cart/
+POST /api/cart/shopping-sessions/{session_id}/update-cart-item/
+DELETE /api/cart/shopping-sessions/{session_id}/delete-cart-item/

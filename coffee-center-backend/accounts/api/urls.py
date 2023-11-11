@@ -1,5 +1,7 @@
 from django.urls import path
-from accounts.api.views import userIndex, userPaymentIndex, userAddressIndex, customUser_resource, userPayment_resource, userAddress_resource
+from accounts.api.views import ( userIndex, userPaymentIndex, userAddressIndex, 
+                                customUser_resource, userPayment_resource,
+                                  userAddress_resource,user_login )
 
 urlpatterns = [
   path('', userIndex, name='api.index'),
@@ -8,4 +10,5 @@ urlpatterns = [
   path('address/<int:id>', userAddress_resource, name='api.userAddress_resource'),
   path('payment/', userPaymentIndex, name='api.payment.index'),
   path('payment/<int:id>', userPayment_resource, name='api.userPayment_resource'),
+  path('login', user_login, name='api.userLogin'),
 ]
