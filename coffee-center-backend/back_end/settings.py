@@ -58,6 +58,7 @@ MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
 ]
 
 
@@ -163,3 +164,8 @@ INTERNAL_IPS = [
     # ...
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    # Add any additional authentication backends if needed
+]
+AUTH_USER_MODEL = 'accounts.CustomUser'

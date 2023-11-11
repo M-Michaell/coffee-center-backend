@@ -10,6 +10,9 @@ class CustomUser(AbstractUser):
     phone = models.CharField(max_length=13, default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+    USERNAME_FIELD = 'email'
+    EMAIL_FIELD = 'email'
+    REQUIRED_FIELDS = [] 
 
     @classmethod
     def get_all_users(cls):
