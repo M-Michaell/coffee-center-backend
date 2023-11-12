@@ -44,33 +44,32 @@ class ShoppingSessionViewSet(viewsets.ModelViewSet):
     def add_to_cart(self, request, pk=None):
         session_id = pk
         shopping_session = get_object_or_404(ShoppingSession, id=session_id)
+        data=request.data
+        if data:
+            product_id = data['product']["id"]
+            quantity = data['quantity'] or 1
+            product = get_object_or_404(Product, id=product_id)
 
-        for data1 in request.data:
-            if data1:
-                data = json.loads(data1)
-                product_id = data['product']["id"]
-                quantity = data['quantity'] or 1
-                product = get_object_or_404(Product, id=product_id)
+            with transaction.atomic():
+                cart_item, created = CartItem.objects.get_or_create(
+                    session=shopping_session,
+                    product=product,
+                    defaults={'quantity': quantity}
+                )
 
-                with transaction.atomic():
-                    cart_item, created = CartItem.objects.get_or_create(
-                        session=shopping_session,
-                        product=product,
-                        defaults={'quantity': quantity}
-                    )
+                if not created:
+                    # note this need som fix 
+                    cart_item.quantity += quantity
+                    cart_item.save()
 
-                    if not created:
-                        cart_item.quantity += quantity
-                        cart_item.save()
+                cart_items = CartItem.objects.filter(session=shopping_session)
+                total = sum(cart_item.product.price_after_discount() * cart_item.quantity for cart_item in cart_items)
 
-                    cart_items = CartItem.objects.filter(session=shopping_session)
-                    total = sum(cart_item.product.price_after_discount() * cart_item.quantity for cart_item in cart_items)
+                shopping_session.total = total
+                shopping_session.save()
 
-                    shopping_session.total = total
-                    shopping_session.save()
-
-                    serializer = CartItemSerializer(cart_item)
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                serializer = CartItemSerializer(cart_item)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response({"error": "No valid data in the request"}, status=status.HTTP_400_BAD_REQUEST)
         
