@@ -171,18 +171,5 @@ AUTHENTICATION_BACKENDS = [
 ]
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  
-]
+
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = (
-    'access-control-allow-headers',
-    'access-control-allow-methods',
-    'access-control-allow-origin',
-    'content-type',
-    'accept',
-    'origin',
-    'authorization',
-    'x-csrftoken',
-    'withcredentials',
-)
