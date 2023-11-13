@@ -1,0 +1,63 @@
+{
+    "user": {
+        "id": 1,
+        "username": "iti",
+        "first_name": "",
+        "last_name": "None",
+        "password": "pbkdf2_sha256$600000$X8jdefCypuJlm5tN0penA6$lEj+0g7Dsf9LfNKy52HEhYV1c9l9o8UfhYswvH2yKxA=",
+        "email": "iti@iti.com",
+        "phone": "0",
+        "created_at": "2023-11-05T19: 32: 26.970761Z",
+        "modified_at": "2023-11-05T19: 32: 26.970769Z"
+    },
+    "items": [
+        {
+            "product": {
+                "id": 2,
+                "name": "coffee2",
+                "desc": "lasdfj",
+                "image": "/media/product/images/packet2-removebg-preview_MeBNTlm.png",
+                "quantity": 900,
+                "price": "200.0",
+                "caffeine_name": "High",
+                "discount_percentage": "10.0",
+                "coffee_type": "Spress",
+                "creator_name": "Maged",
+                "origin_name": "Egypt",
+                "roasting_degree_name": "medium",
+                "created_at": "2023-11-11T00: 01: 18.963084Z",
+                "updated_at": "2023-11-11T13: 18: 42.712656Z"
+            },
+            "quantity": 4
+        },
+        {
+            "product": {
+                "id": 2,
+                "name": "coffee2",
+                "desc": "lasdfj",
+                "image": "/media/product/images/packet2-removebg-preview_MeBNTlm.png",
+                "quantity": 900,
+                "price": "200.0",
+                "caffeine_name": "High",
+                "discount_percentage": "10.0",
+                "coffee_type": "Spress",
+                "creator_name": "Maged",
+                "origin_name": "Egypt",
+                "roasting_degree_name": "medium",
+                "created_at": "2023-11-11T00: 01: 18.963084Z",
+                "updated_at": "2023-11-11T13: 18: 42.712656Z"
+            },
+            "quantity": 1
+        }
+    ],
+    "address": {
+        "Address": "from store"
+    },
+    "payment": {
+        "payment": "cash"
+    },
+    "totalPrice": 1000,
+    "totalDiscount": 100,
+    "toPay": 900,
+    "Shopping_session_id": 1
+}
