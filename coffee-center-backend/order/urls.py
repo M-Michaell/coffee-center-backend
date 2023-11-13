@@ -1,5 +1,5 @@
 from django.urls import path, include
-from order.views import OrderDetailViewSet, OrderItemViewSet, PaymentDetailViewSet
+from order.views import OrderDetailViewSet, OrderItemViewSet, PaymentDetailViewSet ,order_detail
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -10,4 +10,5 @@ router.register(r'payments', PaymentDetailViewSet, basename='payment_detail')
 
 urlpatterns = [
     path('', include(router.urls)),
+    path("data/",order_detail)
 ]
