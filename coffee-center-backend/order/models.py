@@ -3,7 +3,6 @@ from accounts.models import CustomUser
 from product.models import Product
 
 class OrderDetail(models.Model):
-    total = models.IntegerField()
     user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.CASCADE, related_name='order_details')
     payment_method = models.OneToOneField('PaymentDetail', null=True, blank=True, on_delete=models.CASCADE, related_name='order_detail')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -52,7 +51,11 @@ class PaymentDetail(models.Model):
         ('P', 'paid'),
         ('NP', 'unpaid')
     ]
+
     amount = models.IntegerField()
+    total_discount = models.IntegerField()
+    total_price = models.IntegerField()
+    address_to_send = models.CharField(max_length=100)
     provider = models.CharField(max_length=50)
     status = models.CharField(max_length=2, choices=status_choices, default='NP')
     created_at = models.DateTimeField(auto_now_add=True)
