@@ -26,7 +26,10 @@ SECRET_KEY = 'django-insecure-qmk29g3mkutv5d0jxmve28(merszgedl3gej=y&9@%aor64v0a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    '89be-102-185-0-52.ngrok-free.app',
+]
 
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
@@ -235,5 +238,9 @@ DJOSER = {
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
+
+
+
+
 
 
