@@ -25,4 +25,6 @@ urlpatterns = [
     path('origins/', views.origin_list),
     path('origin/<int:pk>/', views.origin_detail),
 
+    path('search/', views.search, name='search'),
+
 ]
