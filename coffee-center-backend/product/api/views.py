@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from rest_framework import status
+from django.http import JsonResponse
+from django.core.paginator import Paginator, EmptyPage
 
 
 
@@ -256,3 +258,86 @@ def origin_detail(request, pk):
     elif request.method == 'DELETE':
         origin.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+from django.core.paginator import Paginator, EmptyPage
+from django.core.paginator import Paginator, EmptyPage
+from django.http import JsonResponse
+
+@api_view(["GET"])
+def search(request):
+    search_word = request.GET.get('search_word')
+    filters = request.GET.get('filters')
+    page = int(request.GET.get('page', 1))
+
+    # Fetch all available filter options
+    coffee_types = CoffeeType.objects.all()
+    caffeine_options = Caffeine.objects.all()
+    creator_options = Creator.objects.all()
+    origin_options = Origin.objects.all()
+    roasting_degree_options = RoastingDegree.objects.all()
+
+    # Serialize filter options
+    coffee_type_serializer = CoffeeTypeSerializer(coffee_types, many=True)
+    caffeine_serializer = CaffeineSerializer(caffeine_options, many=True)
+    creator_serializer = CreatorSerializer(creator_options, many=True)
+    origin_serializer = OriginSerializer(origin_options, many=True)
+    roasting_degree_serializer = RoastingDegreeSerializer(roasting_degree_options, many=True)
+
+    filter_options = {
+        'coffee_types': coffee_type_serializer.data,
+        'caffeine_options': caffeine_serializer.data,
+        'creator_options': creator_serializer.data,
+        'origin_options': origin_serializer.data,
+        'roasting_degree_options': roasting_degree_serializer.data,
+    }
+
+    product_list = Product.objects.filter(name__icontains=search_word)
+
+    if filters:
+        filter_list = filters.split(',')
+
+        for filter_item in filter_list:
+            filter_parts = filter_item.split('=')
+            if len(filter_parts) == 2:
+                filter_name, filter_value = filter_parts
+
+                if filter_name == 'CoffeeType':
+                    product_list = product_list.filter(coffee_type_id=filter_value)
+                elif filter_name == 'Caffeine':
+                    product_list = product_list.filter(caffeine_id=filter_value)
+                elif filter_name == 'Creator':
+                    product_list = product_list.filter(creator_id=filter_value)
+                elif filter_name == 'Origin':
+                    product_list = product_list.filter(origin_id=filter_value)
+                elif filter_name == 'RoastingDegree':
+                    product_list = product_list.filter(roasting_degree_id=filter_value)
+                else:
+                    return JsonResponse({"error": f"Invalid filter: {filter_name}"}, status=400)
+
+    # Implement Pagination
+    items_per_page = 20
+    paginator = Paginator(product_list, items_per_page)
+
+    try:
+        current_page_products = paginator.page(page)
+    except EmptyPage:
+        return JsonResponse({"error": "Page not found"}, status=404)
+
+    # Serialize product_list to JSON using ProductSerializer
+    product_serializer = ProductSerializer(current_page_products, many=True)
+    serialized_products = product_serializer.data
+
+    return JsonResponse({
+        "products": serialized_products,
+        "search_word": search_word,
+        "filter_options": filter_options,
+        "pagination_info": {
+            "total_pages": paginator.num_pages,
+            "current_page": current_page_products.number,
+            "total_items": paginator.count,
+            "items_per_page": items_per_page,
+        }
+    })
