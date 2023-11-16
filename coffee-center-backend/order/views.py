@@ -3,9 +3,9 @@ from order.models import OrderDetail, OrderItem, PaymentDetail
 from order.serializer import OrderDetailSerializer, OrderItemSerializer, PaymentDetailSerializer
 from accounts.models import CustomUser
 from product.models import Product
+
 class OrderDetailViewSet(ModelViewSet):
     serializer_class = OrderDetailSerializer
-
     def get_queryset(self):
         return OrderDetail.objects.all()
 
