@@ -290,7 +290,6 @@ def origin_detail(request, pk):
 
 
 from django.core.paginator import Paginator, EmptyPage
-from django.core.paginator import Paginator, EmptyPage
 from django.http import JsonResponse
 
 @api_view(["GET"])
@@ -299,14 +298,12 @@ def search(request):
     filters = request.GET.getlist('filters')
     page = int(request.GET.get('page', 1))
 
-    # Fetch all available filter options
     coffee_types = CoffeeType.objects.all()
     caffeine_options = Caffeine.objects.all()
     creator_options = Creator.objects.all()
     origin_options = Origin.objects.all()
     roasting_degree_options = RoastingDegree.objects.all()
 
-    # Serialize filter options
     coffee_type_serializer = CoffeeTypeSerializer(coffee_types, many=True)
     caffeine_serializer = CaffeineSerializer(caffeine_options, many=True)
     creator_serializer = CreatorSerializer(creator_options, many=True)
@@ -325,19 +322,16 @@ def search(request):
     product_list = Product.objects.filter(name__icontains=search_word)
 
     if filters:
-        # print ("filters",filters)
         for i in filters :
             moded_filters=i.split(',')
             for filter_item in moded_filters:
                 filter_parts = filter_item.split('=')
-                # print ("parts",filter_parts)
                 if len(filter_parts) == 2:
                     filter_name, filter_value = filter_parts
                     print("name",filter_name)
                     print("value",filter_value)
 
                     if filter_value:
-                        # Check if the filter value is not empty before applying the filter
                         if filter_name == 'CoffeeType':
                             coffee_type_values = filter_value.split('_')
                             product_list = product_list.filter(coffee_type_id__in=coffee_type_values)
