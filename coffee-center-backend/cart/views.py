@@ -68,8 +68,8 @@ class ShoppingSessionViewSet(viewsets.ModelViewSet):
                 shopping_session.total = total
                 shopping_session.save()
 
-                serializer = CartItemSerializer(cart_item)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                
+                return Response({"message":"Product added Successfully"}, status=status.HTTP_201_CREATED)
 
         return Response({"error": "No valid data in the request"}, status=status.HTTP_400_BAD_REQUEST)
         
@@ -99,32 +99,32 @@ class ShoppingSessionViewSet(viewsets.ModelViewSet):
                     shopping_session.save()
 
                     serializer = CartItemSerializer(cart_item)
-                    return Response(serializer.data, status=status.HTTP_200_OK)
+                    return Response({"message":"done"}, status=status.HTTP_200_OK)
 
-        return Response({"error": "Product data is missing in the request"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Error happened try again'}, status=status.HTTP_400_BAD_REQUEST)
 
 
     @action(detail=True, methods=['delete'])
     def delete_cart_item(self, request, pk=None):
-        session_id = pk
-        product=request.data["product"]
-        product_id = json.loads(product)["id"]
-        
-        shopping_session = get_object_or_404(ShoppingSession, id=session_id)
-        cart_item = get_object_or_404(CartItem, session=shopping_session, product_id=product_id)
+        try:
+            session_id = pk
+            product = request.data.get("product")
+            product_id = json.loads(product)["id"]
 
-        with transaction.atomic():
-            cart_item.delete()
+            shopping_session = get_object_or_404(ShoppingSession, id=session_id)
+            cart_item = get_object_or_404(CartItem, session=shopping_session, product_id=product_id)
 
-            # Recalculate total
-            cart_items = CartItem.objects.filter(session=shopping_session)
-            total = sum(cart_item.product.price_after_discount() * cart_item.quantity for cart_item in cart_items)
+            with transaction.atomic():
+                cart_item.delete()
 
-            shopping_session.total = total
-            shopping_session.save()
+                # Recalculate total
+                cart_items = CartItem.objects.filter(session=shopping_session)
+                total = sum(cart_item.product.price_after_discount() * cart_item.quantity for cart_item in cart_items)
 
-        return Response({'detail': 'Cart item deleted successfully.', 'total': total}, status=status.HTTP_204_NO_CONTENT)
-    
+                shopping_session.total = total
+                shopping_session.save()
+                
 
-
-    
+            return Response(data={'message': 'Product deleted from cart successfully.'}, status=status.HTTP_204_NO_CONTENT)
+        except :
+            return Response({'error': 'Error happened try again'}, status=status.HTTP_404_NOT_FOUND)
