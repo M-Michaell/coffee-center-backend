@@ -12,9 +12,36 @@ from django.core.paginator import Paginator, EmptyPage
 @api_view(['GET', 'POST'])
 def product_list(request):
     if request.method == 'GET':
+        page = request.GET.get('page', 1)
         product = Product.objects.all()
-        serializers = ProductSerializer(product, many=True)
-        return Response({"page":1, "list":serializers.data})
+
+        items_per_page = 20
+        paginator = Paginator(product, items_per_page)
+
+        try:
+            current_page_products = paginator.page(page)
+        except EmptyPage:
+            return Response({"error": "Page not found"}, status=404)
+
+        product_serializer = ProductSerializer(current_page_products, many=True)
+        serialized_products = product_serializer.data
+
+        return JsonResponse({
+            "products": serialized_products,
+            "pagination_info": {
+                "total_pages": paginator.num_pages,
+                "current_page": current_page_products.number
+            }
+        })
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializers = ProductSerializer(data=data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
     elif request.method == 'POST':
         data = JSONParser().parse(request)
         serializers = ProductSerializer(data=data)
@@ -263,61 +290,66 @@ def origin_detail(request, pk):
 
 
 from django.core.paginator import Paginator, EmptyPage
-from django.core.paginator import Paginator, EmptyPage
 from django.http import JsonResponse
 
 @api_view(["GET"])
 def search(request):
     search_word = request.GET.get('search_word')
-    filters = request.GET.get('filters')
+    filters = request.GET.getlist('filters')
     page = int(request.GET.get('page', 1))
 
-    # Fetch all available filter options
     coffee_types = CoffeeType.objects.all()
     caffeine_options = Caffeine.objects.all()
     creator_options = Creator.objects.all()
     origin_options = Origin.objects.all()
     roasting_degree_options = RoastingDegree.objects.all()
 
-    # Serialize filter options
     coffee_type_serializer = CoffeeTypeSerializer(coffee_types, many=True)
     caffeine_serializer = CaffeineSerializer(caffeine_options, many=True)
     creator_serializer = CreatorSerializer(creator_options, many=True)
     origin_serializer = OriginSerializer(origin_options, many=True)
     roasting_degree_serializer = RoastingDegreeSerializer(roasting_degree_options, many=True)
+    
 
     filter_options = {
-        'coffee_types': coffee_type_serializer.data,
-        'caffeine_options': caffeine_serializer.data,
-        'creator_options': creator_serializer.data,
-        'origin_options': origin_serializer.data,
-        'roasting_degree_options': roasting_degree_serializer.data,
+        'CoffeeType': coffee_type_serializer.data,
+        'Caffeine': caffeine_serializer.data,
+        'Creator': creator_serializer.data,
+        'Origin': origin_serializer.data,
+        'RoastingDegree': roasting_degree_serializer.data,
     }
 
     product_list = Product.objects.filter(name__icontains=search_word)
 
     if filters:
-        filter_list = filters.split(',')
+        for i in filters :
+            moded_filters=i.split(',')
+            for filter_item in moded_filters:
+                filter_parts = filter_item.split('=')
+                if len(filter_parts) == 2:
+                    filter_name, filter_value = filter_parts
+                    print("name",filter_name)
+                    print("value",filter_value)
 
-        for filter_item in filter_list:
-            filter_parts = filter_item.split('=')
-            if len(filter_parts) == 2:
-                filter_name, filter_value = filter_parts
+                    if filter_value:
+                        if filter_name == 'CoffeeType':
+                            coffee_type_values = filter_value.split('_')
+                            product_list = product_list.filter(coffee_type_id__in=coffee_type_values)
+                        elif filter_name == 'Caffeine':
+                            caffeine_values = filter_value.split('_')
+                            product_list = product_list.filter(caffeine_id__in=caffeine_values)
+                        elif filter_name == 'Creator':
+                            creator_values = filter_value.split('_')
+                            product_list = product_list.filter(creator_id__in=creator_values)
+                        elif filter_name == 'Origin':
+                            origin_values = filter_value.split('_')
+                            product_list = product_list.filter(origin_id__in=origin_values)
+                        elif filter_name == 'RoastingDegree':
+                            roasting_degree_values = filter_value.split('_')
+                            product_list = product_list.filter(roasting_degree_id__in=roasting_degree_values)
+                        else:
+                            return JsonResponse({"error": f"Invalid filter: {filter_name}"}, status=400)
 
-                if filter_name == 'CoffeeType':
-                    product_list = product_list.filter(coffee_type_id=filter_value)
-                elif filter_name == 'Caffeine':
-                    product_list = product_list.filter(caffeine_id=filter_value)
-                elif filter_name == 'Creator':
-                    product_list = product_list.filter(creator_id=filter_value)
-                elif filter_name == 'Origin':
-                    product_list = product_list.filter(origin_id=filter_value)
-                elif filter_name == 'RoastingDegree':
-                    product_list = product_list.filter(roasting_degree_id=filter_value)
-                else:
-                    return JsonResponse({"error": f"Invalid filter: {filter_name}"}, status=400)
-
-    # Implement Pagination
     items_per_page = 20
     paginator = Paginator(product_list, items_per_page)
 
@@ -326,7 +358,6 @@ def search(request):
     except EmptyPage:
         return JsonResponse({"error": "Page not found"}, status=404)
 
-    # Serialize product_list to JSON using ProductSerializer
     product_serializer = ProductSerializer(current_page_products, many=True)
     serialized_products = product_serializer.data
 
@@ -336,8 +367,6 @@ def search(request):
         "filter_options": filter_options,
         "pagination_info": {
             "total_pages": paginator.num_pages,
-            "current_page": current_page_products.number,
-            "total_items": paginator.count,
-            "items_per_page": items_per_page,
+            "current_page": current_page_products.number
         }
     })

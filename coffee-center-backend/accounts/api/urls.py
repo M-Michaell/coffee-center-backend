@@ -1,7 +1,7 @@
 from django.urls import path, include
 from accounts.api.views import ( userIndex, userPaymentIndex, userAddressIndex, 
                                 customUser_resource, userPayment_resource,
-                                  userAddress_resource,user_login )
+                                  userAddress_resource )
 
 # urlpatterns = [
 #
