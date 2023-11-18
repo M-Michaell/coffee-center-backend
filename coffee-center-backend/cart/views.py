@@ -128,3 +128,41 @@ class ShoppingSessionViewSet(viewsets.ModelViewSet):
             return Response(data={'message': 'Product deleted from cart successfully.'}, status=status.HTTP_204_NO_CONTENT)
         except :
             return Response({'error': 'Error happened try again'}, status=status.HTTP_404_NOT_FOUND)
+
+
+# Modify your user login view or authentication logic
+
+from django.http import JsonResponse
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from cart.models import ShoppingSession
+from cart.serializers import ShoppingSessionSerializer
+from accounts.api.serializers import UserAddressSerializer ,UserPaymentSerializer
+from accounts.models import User_Address,User_Payment
+
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+# @csrf_exempt
+def user_data(request, pk=None):
+    user=pk
+    if user:
+
+        shopping_session, created = ShoppingSession.objects.get_or_create(user=user)
+
+        addresses = User_Address.objects.filter(user=user)
+        address_serializers = [UserAddressSerializer(address).data for address in addresses]
+
+        payments = User_Payment.objects.filter(user=user)
+        payment_serializers = [UserPaymentSerializer(payment).data for payment in payments]
+
+        session_serializer = ShoppingSessionSerializer(shopping_session)
+
+        return JsonResponse({
+            'session': session_serializer.data,
+            'addresses': address_serializers,
+            'payments': payment_serializers,
+    })
+    else:
+      return JsonResponse({'error': 'error when get data'}, status=400)
