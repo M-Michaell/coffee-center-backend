@@ -138,7 +138,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from cart.models import ShoppingSession
 from cart.serializers import ShoppingSessionSerializer
 from accounts.api.serializers import UserAddressSerializer ,UserPaymentSerializer
-from accounts.models import User_Address,User_Payment
+from accounts.models import User_Address,User_Payment ,CustomUser
 
 
 
@@ -148,6 +148,7 @@ from accounts.models import User_Address,User_Payment
 def user_data(request, pk=None):
     user=pk
     if user:
+        user = get_object_or_404(CustomUser, pk=pk)
 
         shopping_session, created = ShoppingSession.objects.get_or_create(user=user)
 
