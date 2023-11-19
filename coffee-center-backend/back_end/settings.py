@@ -181,6 +181,7 @@ EMAIL_HOST_USER = 'mm994225@gmail.com'
 EMAIL_HOST_PASSWORD = 'vkaqotfcuhupneuu'
 EMAIL_USE_TLS = True
 SITE_NAME = "coffee-center"
+DOMAIN = 'localhost:3000'
 
 
 REST_FRAMEWORK = {
@@ -214,7 +215,7 @@ DJOSER = {
     "SET_PASSWORD_RETYPE": True,
     "USERNAME_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
     "PASSWORD_RESET_CONFIRM_URL": "email/reset/confirm/{uid}/{token}",
-    "ACTIVATION_URL": "activate/{uid}/{token}",
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
     "SEND_ACTIVATION_EMAIL": True,
     "SOCIAL_AUTH_TOKEN_STRATEGY": "djoser.social.token.jwt.TokenStrategy",
     "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": [
@@ -236,7 +237,3 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:3000",
-    "http://localhost:3000",
-]
