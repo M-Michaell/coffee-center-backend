@@ -18,4 +18,6 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('auth/', include('djoser.social.urls')),
+    path('address/', userAddressIndex, name='api.address.index'),
+    path('address/<int:id>', userAddress_resource, name='api.userAddress_resource'),
 ]

@@ -39,10 +39,8 @@ class UserAddressSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     user = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), required=True)
     address_line1 = serializers.CharField(max_length=200)
-    address_line2 = serializers.CharField(max_length=200, required=False, allow_blank=True)
     city = serializers.CharField(max_length=100, required=True)
     postal_code = serializers.CharField(max_length=100, required=True)
-    country = serializers.CharField(max_length=100, required=True)
     telephone = serializers.CharField(max_length=12, required=False, allow_blank=True)
     mobile = serializers.CharField(max_length=12, required=False, allow_blank=True)
 
@@ -51,10 +49,8 @@ class UserAddressSerializer(serializers.Serializer):
     
     def update(self, instance, validated_data):
       instance.address_line1 = validated_data.get('address_line1')
-      instance.address_line2 = validated_data.get('address_line2')
       instance.city = validated_data.get('city')
       instance.postal_code = validated_data.get('postal_code')
-      instance.country = validated_data.get('country')
       instance.telephone = validated_data.get('telephone')
       instance.mobile = validated_data.get('mobile')
       instance.save()
