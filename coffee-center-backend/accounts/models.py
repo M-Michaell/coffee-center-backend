@@ -58,7 +58,6 @@ class User_Address(models.Model):
     address_line1 = models.CharField(max_length=200)
     city = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
     telephone = models.CharField(max_length=12,null=True, blank=True)
     mobile = models.CharField(max_length=12,null=True, blank=True)
 
