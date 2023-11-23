@@ -26,5 +26,7 @@ urlpatterns = [
     path('origin/<int:pk>/', views.origin_detail),
 
     path('search/', views.search, name='search'),
+    path('create-rate/', views.create_rate, name='rate'),
+
 
 ]
