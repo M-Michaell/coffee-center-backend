@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from product.models import Product, Creator, Caffeine, CoffeeType, RoastingDegree, Origin
+from product.models import Product, Creator, Caffeine, CoffeeType, RoastingDegree, Origin,Rate
 
 class ProductSerializer(serializers.ModelSerializer):
     caffeine_name = serializers.CharField(source='caffeine.name', read_only=True)
@@ -8,10 +8,12 @@ class ProductSerializer(serializers.ModelSerializer):
     creator_name = serializers.CharField(source='creator.name', read_only=True)
     origin_name = serializers.CharField(source='origin', read_only=True)
     roasting_degree_name = serializers.CharField(source='roasting_degree.name', read_only=True)
+    avg_rate = serializers.DecimalField(max_digits=3, decimal_places=2, read_only=True)
+
     class Meta:
         model = Product
         fields = ('id', 'name', 'desc', 'image', 'quantity', 'price', 'caffeine_name', 'discount_percentage', 'coffee_type',
-                  'creator_name', 'origin_name', 'roasting_degree_name', 'created_at', 'updated_at')
+                  'creator_name', 'origin_name', 'roasting_degree_name', 'created_at', 'updated_at',"avg_rate")
         
 class CreatorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,3 +42,10 @@ class OriginSerializer(serializers.ModelSerializer):
     class Meta:
         model = Origin
         fields = '__all__'
+
+class RatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Rate
+        fields = "__all__"
+
+
