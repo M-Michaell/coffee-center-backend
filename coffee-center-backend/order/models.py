@@ -52,12 +52,20 @@ class PaymentDetail(models.Model):
         ('NP', 'unpaid')
     ]
 
+    tracking_choices = [
+        ('o', 'ordered'),
+        ('s', 'shipped'),
+        ('w', 'onTheWay'),
+        ('d', 'delivered'),
+    ]
+
     amount = models.IntegerField()
     total_discount = models.IntegerField()
     total_price = models.IntegerField()
     address_to_send = models.CharField(max_length=100)
     provider = models.CharField(max_length=50)
     status = models.CharField(max_length=2, choices=status_choices, default='NP')
+    tracing = models.CharField(max_length=2, choices=tracking_choices, default='o')
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
