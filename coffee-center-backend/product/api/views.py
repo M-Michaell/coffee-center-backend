@@ -1,8 +1,9 @@
 from product.models import Product, Creator, Caffeine, CoffeeType, RoastingDegree, Origin,Rate
 from product.api.serializers import ProductSerializer, CreatorSerializer, CaffeineSerializer, CoffeeTypeSerializer, RoastingDegreeSerializer, OriginSerializer,RatingSerializer
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import JSONParser
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage
@@ -12,7 +13,8 @@ from django.shortcuts import get_object_or_404
 
 
 @api_view(['GET', 'POST'])
-def product_list(request):
+@parser_classes([MultiPartParser, FormParser])
+def product_list(request, format=None):
     if request.method == 'GET':
         page = request.GET.get('page', 1)
         product = Product.objects.all()
@@ -36,22 +38,13 @@ def product_list(request):
             }
         })
     elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializers = ProductSerializer(data=data)
+        serializers = ProductSerializer(data=request.data)
         if serializers.is_valid():
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializers = ProductSerializer(data=data)
-        if serializers.is_valid():
-            serializers.save()
-            return Response(serializers.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])

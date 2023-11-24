@@ -35,7 +35,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = UserAccountManager()
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'phone']
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'phone', 'is_staff']
 
     def get_full_name(self):
         return f"{self.first_name} - {self.last_name}"
