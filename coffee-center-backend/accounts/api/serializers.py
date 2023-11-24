@@ -6,9 +6,10 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class UserCreateSerializer(UserCreateSerializer):
+
     class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ("id", "email", "username", "phone", "first_name", "last_name", "password")
+        fields = ("id", "email", "username", "phone", "first_name", "last_name", "password", "is_staff")
 
 class CustomUserSerializer(serializers.Serializer):
   id = serializers.IntegerField(read_only=True)
