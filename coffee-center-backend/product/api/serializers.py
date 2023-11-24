@@ -16,8 +16,8 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'desc', 'image', 'quantity', 'price', 'caffeine_name', 'discount_percentage', 'coffee_type',
-                  'creator_name', 'origin_name', 'roasting_degree_name', 'created_at', 'updated_at',"avg_rate")
+        fields = ('id', 'name', 'desc', 'image', 'quantity', 'price' ,'caffeine_name', 'discount_percentage', 'coffee_type',
+                  'creator_name', 'origin_name',"deleted" ,'roasting_degree_name', 'created_at', 'updated_at',"deleted_at","avg_rate")
         
 class CreatorSerializer(serializers.ModelSerializer):
     class Meta:
