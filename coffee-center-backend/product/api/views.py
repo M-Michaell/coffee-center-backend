@@ -1,5 +1,5 @@
-from product.models import Product, Creator, Caffeine, CoffeeType, RoastingDegree, Origin
-from product.api.serializers import ProductSerializer, CreatorSerializer, CaffeineSerializer, CoffeeTypeSerializer, RoastingDegreeSerializer, OriginSerializer
+from product.models import Product, Creator, Caffeine, CoffeeType, RoastingDegree, Origin,Rate
+from product.api.serializers import ProductSerializer, CreatorSerializer, CaffeineSerializer, CoffeeTypeSerializer, RoastingDegreeSerializer, OriginSerializer,RatingSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import JSONParser
@@ -7,6 +7,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
 from django.http import JsonResponse
 from django.core.paginator import Paginator, EmptyPage
+from django.shortcuts import get_object_or_404
+
 
 
 
@@ -363,3 +365,47 @@ def search(request):
             "current_page": current_page_products.number
         }
     })
+
+# ----------------------------------------------------------------
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view
+from .serializers import RatingSerializer
+
+@api_view(["POST"])
+def create_rate(request):
+    user = request.data.get("user")
+    product = request.data.get("product")
+    rate_value = request.data.get("rateValue")
+
+    if rate_value == 0 :
+        rate = Rate.objects.filter(user_id=user, product_id=product).first() or 0
+        if rate:
+            return JsonResponse({"rate": RatingSerializer(rate).data})
+        else:
+            return JsonResponse({"rate": "0"})
+
+    elif rate_value != 0 and product and user:
+        rate, created = Rate.objects.update_or_create(
+            user_id=user,
+            product_id=product,
+            defaults={"rate": rate_value}
+        )
+        return JsonResponse({"rate": RatingSerializer(rate).data})
+
+    else:
+        return JsonResponse({"message": "Invalid request."}, status=400)
+    
+
+@api_view(["GET"])
+def get_samilar(request):
+    origin_name = request.GET.get('origin_name')
+    caffeine_name = request.GET.get('caffeine_name')
+    product_id=request.GET.get('id')
+
+    samilars = Product.objects.filter(
+        origin__name=origin_name,
+        caffeine__name=caffeine_name,
+    ).exclude(id=product_id)[:20]
+    serialized_samilars=ProductSerializer(samilars, many=True).data
+    return Response(serialized_samilars)

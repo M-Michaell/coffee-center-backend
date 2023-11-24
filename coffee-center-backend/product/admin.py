@@ -9,6 +9,8 @@ admin.site.register(models.Caffeine)
 admin.site.register(models.CoffeeType)
 admin.site.register(models.Product)
 admin.site.register(models.Discount)
+admin.site.register(models.Rate)
+
 
 
 
