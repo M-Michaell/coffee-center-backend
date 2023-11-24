@@ -65,12 +65,9 @@ def order_detail(request):
 @api_view(['POST'])
 def order_paid(request):
     data = request.data
-    print('data: ',data)
     order = OrderDetail.objects.get(id=data['order_id'])
     payment_method = order.payment_method.id
-    print(payment_method)
     payment_method = PaymentDetail.objects.get(id=payment_method)
-    print(payment_method)
     payment_method.status = 'P'
     payment_method.save()
     
@@ -83,3 +80,21 @@ def user_orders(request, id):
     orders_data = [{'id': order.id, 'price':order.payment_method.amount, 'created_at':order.created_at} for order in user_orders]
 
     return JsonResponse({'orders': orders_data})
+
+
+
+
+@api_view(['POST'])
+def order_tracing(request):
+    data = request.data
+    print('data: ',data)
+    order = OrderDetail.objects.get(id=data['order_id'])
+    payment_method = order.payment_method.id
+    print(payment_method)
+    payment_method = PaymentDetail.objects.get(id=payment_method)
+    print(payment_method)
+    payment_method.tracing = data['order_tracing']
+    payment_method.save()
+    
+    return Response({"status":'successfully updated!'}, status=status.HTTP_200_OK)
+    
