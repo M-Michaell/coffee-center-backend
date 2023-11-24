@@ -17,7 +17,7 @@ from django.shortcuts import get_object_or_404
 def product_list(request, format=None):
     if request.method == 'GET':
         page = request.GET.get('page', 1)
-        product = Product.objects.all()
+        product = Product.objects.all().exclude(deleted=True)
 
         items_per_page = 20
         paginator = Paginator(product, items_per_page)
