@@ -28,6 +28,9 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('create-rate/', views.create_rate, name='rate'),
     path('get_samilar/', views.get_samilar, name='samilar'),
+    path('get_rating/', views.get_rating, name='product-rates'),
+    path('get_rating/<int:pk>/', views.get_rating, name='product-rates'),
+
 
 
 ]
