@@ -409,3 +409,27 @@ def get_samilar(request):
     ).exclude(id=product_id)[:20]
     serialized_samilars=ProductSerializer(samilars, many=True).data
     return Response(serialized_samilars)
+
+# -----------------------------------------------------
+from django.db.models import Avg
+
+@api_view(['GET'])
+def get_rating(request, pk=None):
+    if pk is None:
+        products_data = Product.objects.annotate(avg_rate=Avg('rate__rate')).values("id", 'name', 'avg_rate')
+        return Response(products_data)
+
+    if pk:
+        product_rates = Rate.objects.filter(product__id=pk).values("user__id", "user__email", "user__username", "rate", "product__id", "product__name")
+        formatted_data = []
+        for rate in product_rates:
+            formatted_data.append({
+                'user_id': rate['user__id'],
+                'user_email': rate['user__email'],
+                'user_username': rate['user__username'],
+                'rate': rate['rate'],
+                'product_id': rate['product__id'],
+                'product_name': rate['product__name'],
+            })
+
+        return Response(formatted_data)
