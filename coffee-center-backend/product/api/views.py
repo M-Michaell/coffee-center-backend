@@ -17,7 +17,7 @@ from django.shortcuts import get_object_or_404
 def product_list(request, format=None):
     if request.method == 'GET':
         page = request.GET.get('page', 1)
-        product = Product.objects.all().exclude(deleted=True)
+        product = Product.all_objects.all()
 
         items_per_page = 20
         paginator = Paginator(product, items_per_page)
@@ -38,7 +38,9 @@ def product_list(request, format=None):
             }
         })
     elif request.method == 'POST':
-        serializers = ProductSerializer(data=request.data)
+        data = request.data
+        serializers = ProductSerializer(data=data)
+        print(request.data)
         if serializers.is_valid():
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
@@ -47,7 +49,7 @@ def product_list(request, format=None):
 
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE', 'PATCH'])
 def product_detail(request, pk):
     try:
         product = Product.objects.get(pk=pk)
@@ -68,7 +70,11 @@ def product_detail(request, pk):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        product.delete()
+        product.soft_delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    elif request.method == 'PATCH':
+        product.restore()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #Creator-----------------------------------------------------------------------------------------------------
@@ -110,7 +116,7 @@ def creator_detail(request, pk):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        creator.delete()
+        creator.soft_delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #---------------------------------------------------------------------------------------
@@ -152,7 +158,7 @@ def caffeine_detail(request, pk):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        caffeine.delete()
+        caffeine.soft_delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #------------------------------------------------------------------------------------------
@@ -194,7 +200,7 @@ def coffeeType_detail(request, pk):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        coffeeType.delete()
+        coffeeType.soft_delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #-----------------------------------------------------------------------------------------
@@ -236,7 +242,7 @@ def roastingDegree_detail(request, pk):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        roastingDegree.delete()
+        roastingDegree.soft_delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #----------------------------------------------------------------------------------------------
@@ -278,7 +284,7 @@ def origin_detail(request, pk):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        origin.delete()
+        origin.soft_delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
