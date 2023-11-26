@@ -31,6 +31,7 @@ urlpatterns = [
     path('get_rating/', views.get_rating, name='product-rates'),
     path('get_rating/<int:pk>/', views.get_rating, name='product-rates'),
 
-
+    path('discount_list/', views.discount_list),
+    path('discount_details/<int:pk>/', views.discount_details),
 
 ]
