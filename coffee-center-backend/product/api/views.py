@@ -1,5 +1,5 @@
-from product.models import Product, Creator, Caffeine, CoffeeType, RoastingDegree, Origin,Rate
-from product.api.serializers import ProductSerializer, CreatorSerializer, CaffeineSerializer, CoffeeTypeSerializer, RoastingDegreeSerializer, OriginSerializer,RatingSerializer
+from product.models import Product, Creator, Caffeine, CoffeeType, RoastingDegree, Origin,Rate ,Discount
+from product.api.serializers import ProductSerializer, CreatorSerializer, CaffeineSerializer, CoffeeTypeSerializer, RoastingDegreeSerializer, OriginSerializer,RatingSerializer,DiscountSerializer
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, parser_classes
 from rest_framework.parsers import JSONParser
@@ -443,3 +443,51 @@ def get_rating(request, pk=None):
             })
 
         return Response(formatted_data)
+    
+
+# ----------------------------------------------------------------
+@api_view(['GET', 'PUT', 'DELETE','PATCH'])
+def discount_details(request,pk):
+    print(pk)
+    try:
+        discount = Discount.all_objects.get(pk=pk)
+    except Discount.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializers = DiscountSerializer(discount)
+        return Response(serializers.data)
+
+    elif request.method == 'PUT':
+        data = JSONParser().parse(request)
+        serializers = DiscountSerializer(instance=discount, data=data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        discount.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    elif request.method == 'PATCH':
+        discount.restore()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+@api_view(['GET', 'POST'])
+def discount_list(request):
+    if request.method == 'GET':
+        discount = Discount.all_objects.all()
+        serializers = DiscountSerializer(discount, many=True)
+        return Response(serializers.data)
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializers = DiscountSerializer(data=data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# --------------------------------

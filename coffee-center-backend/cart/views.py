@@ -26,19 +26,18 @@ class ShoppingSessionViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    # @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    @action(detail=True, methods=['post'])
     def empty_cart_items(self, request, pk=None):
-        shopping_session = get_object_or_404(ShoppingSession, user=request.user, id=pk)
+        shopping_session = get_object_or_404(ShoppingSession, id=pk)
 
         with transaction.atomic():
-            total = CartItem.objects.filter(session=shopping_session).aggregate(Sum('product__price_after_discount'))['product__price_after_discount__sum'] or 0
-
             CartItem.objects.filter(session=shopping_session).delete()
 
             shopping_session.total = 0
             shopping_session.save()
 
-        return Response({'detail': 'Cart items have been emptied.', 'total': total}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Cart items have been emptied.', 'total': 0}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['post'])
     def add_to_cart(self, request, pk=None):
@@ -130,8 +129,6 @@ class ShoppingSessionViewSet(viewsets.ModelViewSet):
             return Response({'error': 'Error happened try again'}, status=status.HTTP_404_NOT_FOUND)
 
 
-# Modify your user login view or authentication logic
-
 from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -144,7 +141,6 @@ from accounts.models import User_Address,User_Payment ,CustomUser
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-# @csrf_exempt
 def user_data(request, pk=None):
     user=pk
     if user:

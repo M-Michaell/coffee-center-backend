@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from product.models import Product, Creator, Caffeine, CoffeeType, RoastingDegree, Origin,Rate
+from product.models import Product, Creator, Caffeine, CoffeeType, RoastingDegree, Origin,Rate,Discount
 
 class ProductSerializer(serializers.ModelSerializer):
     caffeine_name = serializers.CharField(source='caffeine.name', read_only=True)
@@ -52,4 +52,8 @@ class RatingSerializer(serializers.ModelSerializer):
         model= Rate
         fields = "__all__"
 
+class DiscountSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Discount
+        fields = "__all__"
 
