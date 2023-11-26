@@ -446,15 +446,16 @@ def get_rating(request, pk=None):
     
 
 # ----------------------------------------------------------------
-@api_view(['GET', 'PUT', 'DELETE'])
-def discount_details(request, pk):
+@api_view(['GET', 'PUT', 'DELETE','PATCH'])
+def discount_details(request,pk):
+    print(pk)
     try:
-        discount = Discount.objects.get(pk=pk)
+        discount = Discount.all_objects.get(pk=pk)
     except Discount.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializers = DiscountSerializer(Discount)
+        serializers = DiscountSerializer(discount)
         return Response(serializers.data)
 
     elif request.method == 'PUT':
@@ -468,6 +469,9 @@ def discount_details(request, pk):
 
     elif request.method == 'DELETE':
         discount.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    elif request.method == 'PATCH':
+        discount.restore()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
