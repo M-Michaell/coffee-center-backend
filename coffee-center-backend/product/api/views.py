@@ -17,7 +17,9 @@ from django.shortcuts import get_object_or_404
 def product_list(request, format=None):
     if request.method == 'GET':
         page = request.GET.get('page', 1)
+        productNonFiltered = Product.all_objects.filter()
         product = Product.objects.all().exclude(deleted=True)
+
 
         items_per_page = 20
         paginator = Paginator(product, items_per_page)
@@ -29,8 +31,10 @@ def product_list(request, format=None):
 
         product_serializer = ProductSerializer(current_page_products, many=True)
         serialized_products = product_serializer.data
+        productNonFiltered_serializer = ProductSerializer(productNonFiltered, many=True)
 
         return JsonResponse({
+            "all_product": productNonFiltered_serializer.data,
             "products": serialized_products,
             "pagination_info": {
                 "total_pages": paginator.num_pages,
@@ -38,7 +42,9 @@ def product_list(request, format=None):
             }
         })
     elif request.method == 'POST':
-        serializers = ProductSerializer(data=request.data)
+        data = request.data
+        serializers = ProductSerializer(data=data)
+        print(request.data)
         if serializers.is_valid():
             serializers.save()
             return Response(serializers.data, status=status.HTTP_201_CREATED)
@@ -47,10 +53,10 @@ def product_list(request, format=None):
 
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET', 'PUT', 'DELETE', 'PATCH'])
 def product_detail(request, pk):
     try:
-        product = Product.objects.get(pk=pk)
+        product = Product.all_objects.get(id=pk)
     except Product.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -59,7 +65,7 @@ def product_detail(request, pk):
         return Response(serializers.data)
 
     elif request.method == 'PUT':
-        data = JSONParser().parse(request)
+        data = request.data
         serializers = ProductSerializer(instance=product, data=data)
         if serializers.is_valid():
             serializers.save()
@@ -68,7 +74,11 @@ def product_detail(request, pk):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        product.delete()
+        product.soft_delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    elif request.method == 'PATCH':
+        product.restore()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #Creator-----------------------------------------------------------------------------------------------------
@@ -110,7 +120,7 @@ def creator_detail(request, pk):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        creator.delete()
+        creator.soft_delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #---------------------------------------------------------------------------------------
@@ -152,7 +162,7 @@ def caffeine_detail(request, pk):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        caffeine.delete()
+        caffeine.soft_delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #------------------------------------------------------------------------------------------
@@ -194,7 +204,7 @@ def coffeeType_detail(request, pk):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        coffeeType.delete()
+        coffeeType.soft_delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #-----------------------------------------------------------------------------------------
@@ -236,7 +246,7 @@ def roastingDegree_detail(request, pk):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        roastingDegree.delete()
+        roastingDegree.soft_delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 #----------------------------------------------------------------------------------------------
@@ -278,7 +288,7 @@ def origin_detail(request, pk):
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     elif request.method == 'DELETE':
-        origin.delete()
+        origin.soft_delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
