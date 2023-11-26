@@ -4,9 +4,9 @@ from django.utils import timezone
 class SoftDeletionQuerySet(models.QuerySet):
       def delete(self, hard=False):
         if hard:
-            super().delete()  
+            super().delete()
         else:
-            self.update(deleted=True, deleted_at=timezone.now()) 
+            self.update(deleted=True, deleted_at=timezone.now())
 
 
 class SoftDeletionManager(models.Manager):
@@ -19,6 +19,14 @@ class SoftDeletionModel(models.Model):
 
     objects = SoftDeletionManager()
     all_objects = models.Manager()
+
+    def delete(self, hard=False, *args, **kwargs):
+        if not hard:
+            self.deleted = True
+            self.deleted_at = timezone.now()
+            self.save()
+        else:
+            super().delete(*args, **kwargs)
 
     def soft_delete(self):
         self.deleted = True

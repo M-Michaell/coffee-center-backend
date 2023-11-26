@@ -88,8 +88,10 @@ class Product(SoftDeletionModel):
     def avg_rate(self):
         return Rate.objects.filter(product=self).aggregate(avg_rate=Avg('rate'))['avg_rate'] or ('0.0')
 
+
+from django.core.validators import MinValueValidator, MaxValueValidator
 class Rate(SoftDeletionModel):
-    rate = models.IntegerField(default=5)
+    rate = models.IntegerField(default=5, validators=[MinValueValidator(1), MaxValueValidator(5)])   
     product = models.ForeignKey('Product', on_delete=models.CASCADE, related_name='rate')
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='rate')
     created_at = models.DateTimeField(auto_now_add=True)
