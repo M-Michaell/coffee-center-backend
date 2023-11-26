@@ -17,7 +17,9 @@ from django.shortcuts import get_object_or_404
 def product_list(request, format=None):
     if request.method == 'GET':
         page = request.GET.get('page', 1)
-        product = Product.all_objects.all()
+        productNonFiltered = Product.all_objects.filter()
+        product = Product.objects.all().exclude(deleted=True)
+
 
         items_per_page = 20
         paginator = Paginator(product, items_per_page)
@@ -29,8 +31,10 @@ def product_list(request, format=None):
 
         product_serializer = ProductSerializer(current_page_products, many=True)
         serialized_products = product_serializer.data
+        productNonFiltered_serializer = ProductSerializer(productNonFiltered, many=True)
 
         return JsonResponse({
+            "all_product": productNonFiltered_serializer.data,
             "products": serialized_products,
             "pagination_info": {
                 "total_pages": paginator.num_pages,
@@ -52,7 +56,7 @@ def product_list(request, format=None):
 @api_view(['GET', 'PUT', 'DELETE', 'PATCH'])
 def product_detail(request, pk):
     try:
-        product = Product.objects.get(pk=pk)
+        product = Product.all_objects.get(id=pk)
     except Product.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -61,7 +65,7 @@ def product_detail(request, pk):
         return Response(serializers.data)
 
     elif request.method == 'PUT':
-        data = JSONParser().parse(request)
+        data = request.data
         serializers = ProductSerializer(instance=product, data=data)
         if serializers.is_valid():
             serializers.save()
