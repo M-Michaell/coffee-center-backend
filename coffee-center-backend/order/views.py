@@ -4,6 +4,11 @@ from order.serializer import OrderDetailSerializer, OrderItemSerializer, Payment
 from accounts.models import CustomUser
 from product.models import Product
 from django.http import JsonResponse
+from django.utils import timezone
+from datetime import timedelta
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 
 
 class OrderDetailViewSet(ModelViewSet):
@@ -23,20 +28,18 @@ class PaymentDetailViewSet(ModelViewSet):
     def get_queryset(self):
         return PaymentDetail.objects.all()
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
+
 
 @api_view(['POST'])
 def order_detail(request):
     data = request.data
+    
     payment = PaymentDetail()
     payment.amount = data['toPay']
     payment.total_price = data['totalPrice']
     payment.total_discount = data['totalDiscount']
     payment.provider = data['payment']['payment']
     payment.address_to_send = data['address']['Address']
-    # payment.status = ''
     payment.save()
 
     order = OrderDetail()
@@ -49,14 +52,14 @@ def order_detail(request):
         product = OrderItem()
         product.order = order
         product.quantity = item['quantity']
-
         product_obj = Product.objects.get(id=item['product']['id'])
         product.product = product_obj
+        product.productStaticPrice = product_obj.price
+        product.productStaticDiscount = product_obj.discount.percentage
         product.save()
 
+        
 
-    
-    
     
     return Response({"order_id":order.id}, status=status.HTTP_200_OK)
 
@@ -76,9 +79,19 @@ def order_paid(request):
 
 
 def user_orders(request, id):
-    user_orders = OrderDetail.objects.filter(user=7)
-    orders_data = [{'id': order.id, 'price':order.payment_method.amount, 'created_at':order.created_at} for order in user_orders]
+    startDate = request.GET.get('startDate')
+    endDate = request.GET.get('endDate')
 
+    user_orders = OrderDetail.objects.filter(user=id)
+    
+    if startDate and endDate:
+        start_date = timezone.datetime.strptime(startDate, '%Y-%m-%d').date()
+        end_date = timezone.datetime.strptime(endDate, '%Y-%m-%d').date()
+        end_date += timedelta(days=1)
+        print(start_date,endDate)
+        user_orders = user_orders.filter(created_at__range=(start_date, end_date))
+
+    orders_data = [{'id': order.id, 'price': order.payment_method.amount, 'created_at': order.created_at} for order in user_orders]
     return JsonResponse({'orders': orders_data})
 
 
@@ -97,4 +110,3 @@ def order_tracing(request):
     payment_method.save()
     
     return Response({"status":'successfully updated!'}, status=status.HTTP_200_OK)
-    

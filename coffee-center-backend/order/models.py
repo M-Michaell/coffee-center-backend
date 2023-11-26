@@ -40,6 +40,9 @@ class OrderItem(SoftDeletionModel):
     quantity = models.IntegerField()
     order = models.ForeignKey(OrderDetail, on_delete=models.CASCADE, related_name='order_items')
     product = models.ForeignKey(Product, null=True, blank=True, on_delete=models.CASCADE, related_name='order_items_details')
+    productStaticPrice = models.IntegerField(default=0,null=True,blank=True)
+    productStaticDiscount = models.IntegerField(default=0,null=True,blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(auto_now=True)
@@ -47,10 +50,6 @@ class OrderItem(SoftDeletionModel):
     @classmethod
     def get_all_data(cls):
         return cls.objects.all()
-
-
-
-
 
 
 class PaymentDetail(SoftDeletionModel):
@@ -76,6 +75,12 @@ class PaymentDetail(SoftDeletionModel):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
+
+
     @classmethod
     def get_all_data(cls):
         return cls.objects.all()
+
+
+
+
