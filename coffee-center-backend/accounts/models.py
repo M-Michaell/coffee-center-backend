@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from product.softDeletionModel import SoftDeletionModel
+from product.models import Product
 
 
 class UserAccountManager(BaseUserManager):
@@ -85,3 +86,6 @@ class User_Payment(models.Model):
 # class PaymentProvider(models.Model):
 #     name = models.CharField(max_length=100)
 #     description = models.TextField(blank=True)
+class Wishlist(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)

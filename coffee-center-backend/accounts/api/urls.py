@@ -1,7 +1,7 @@
 from django.urls import path, include
 from accounts.api.views import ( userIndex, userPaymentIndex, userAddressIndex, 
                                 customUser_resource, userPayment_resource,
-                                  userAddress_resource )
+                                  userAddress_resource, wishlist_detail, wishlist_index )
 
 # urlpatterns = [
 #
@@ -20,4 +20,6 @@ urlpatterns = [
     path('auth/', include('djoser.social.urls')),
     path('address/', userAddressIndex, name='api.address.index'),
     path('address/<int:id>', userAddress_resource, name='api.userAddress_resource'),
+    path('wishlist/', wishlist_index, name='wishlistall'),
+    path('wishlist/<int:id>', wishlist_detail, name='wishlist')
 ]

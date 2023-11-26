@@ -2,6 +2,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from accounts.models import CustomUser, User_Address, User_Payment
 from accounts.api.serializers import CustomUserSerializer, UserAddressSerializer, UserPaymentSerializer
+from accounts.models import Wishlist
+from accounts.api.serializers import WishlistSerializer
+
 
 @api_view(['GET', 'POST'])
 def userIndex(request):
@@ -107,3 +110,36 @@ def userPayment_resource(request, id):
     userPayment.delete()
     return Response({'message': 'User deleted via api'}, status= 204)
   
+@api_view(['GET', 'POST'])
+def wishlist_index(request):
+    if request.method == 'POST':
+        wishlist_serializer = WishlistSerializer(data=request.data)
+        if wishlist_serializer.is_valid():
+            wishlist_serializer.save()
+            return Response({'message': 'Wishlist item added via API', 'Wishlist': wishlist_serializer.data}, status=201)
+        return Response(wishlist_serializer.errors, status=400)
+
+    elif request.method == 'GET':
+        wishlists = Wishlist.objects.all()
+        serialized_wishlists = WishlistSerializer(wishlists, many=True)
+        return Response({'message': 'Wishlist data received via API', 'Wishlists': serialized_wishlists.data}, status=200)
+
+@api_view(['GET', 'DELETE', 'PUT'])
+def wishlist_detail(request, id):
+    wishlist_item = Wishlist.objects.filter(id=id).first()
+
+    if request.method == 'GET':
+        serialized_wishlist_item = WishlistSerializer(wishlist_item)
+        return Response({'message': 'Wishlist item data received via API', 'WishlistItem': serialized_wishlist_item.data}, status=200)
+
+    elif request.method == 'PUT':
+        serialized_wishlist_item = WishlistSerializer(instance=wishlist_item, data=request.data)
+        if serialized_wishlist_item.is_valid():
+            serialized_wishlist_item.save()
+            return Response({'message': 'Wishlist item updated via API', 'WishlistItem': serialized_wishlist_item.data}, status=201)
+        return Response(serialized_wishlist_item.errors, status=400)
+
+    elif request.method == 'DELETE':
+        wishlist_item.delete()
+        return Response({'message': 'Wishlist item deleted via API'}, status=204)
+    
