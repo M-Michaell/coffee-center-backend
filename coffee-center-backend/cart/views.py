@@ -57,8 +57,7 @@ class ShoppingSessionViewSet(viewsets.ModelViewSet):
                 )
 
                 if not created:
-                    # note this need som fix 
-                    cart_item.quantity += quantity
+                    cart_item.quantity = quantity
                     cart_item.save()
 
                 cart_items = CartItem.objects.filter(session=shopping_session)
