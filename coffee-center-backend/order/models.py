@@ -13,9 +13,9 @@ class OrderDetail(SoftDeletionModel):
     @classmethod
     def get_all_data(cls):
         return cls.objects.all()
-    def delete(self, pk):
-        order =OrderDetail.objects.filter(order=pk)
-        order.soft_delete()
+    
+    def delete(self):
+        self.soft_delete()
         return "done"
 
 
