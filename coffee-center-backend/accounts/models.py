@@ -88,6 +88,6 @@ class User_Payment(models.Model):
 # class PaymentProvider(models.Model):
 #     name = models.CharField(max_length=100)
 #     description = models.TextField(blank=True)
-class Wishlist(models.Model):
-    user = models.ForeignKey('accounts.CustomUser', on_delete=models.CASCADE)
-    product = models.ForeignKey('product.Product', on_delete=models.CASCADE)
+# class Wishlist(models.Model):
+#     user = models.ForeignKey('accounts.CustomUser', on_delete=models.CASCADE)
+#     product = models.ForeignKey('product.Product', on_delete=models.CASCADE)

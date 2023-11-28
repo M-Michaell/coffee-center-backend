@@ -136,6 +136,8 @@ from cart.models import ShoppingSession
 from cart.serializers import ShoppingSessionSerializer
 from accounts.api.serializers import UserAddressSerializer ,UserPaymentSerializer
 from accounts.models import User_Address,User_Payment ,CustomUser
+from wishList.models import Wishlist
+from wishList.serializers import WishlistSerializer
 
 
 
@@ -146,7 +148,10 @@ def user_data(request, pk=None):
     if user:
         user = get_object_or_404(CustomUser, pk=pk)
 
-        shopping_session, created = ShoppingSession.objects.get_or_create(user=user)
+        shopping_session,created = ShoppingSession.objects.get_or_create(user=user)
+
+        wishlist, created=Wishlist.objects.get_or_create(user=user)
+        wishlist_serializes=WishlistSerializer(wishlist)
 
         addresses = User_Address.objects.filter(user=user)
         address_serializers = [UserAddressSerializer(address).data for address in addresses]
@@ -160,6 +165,7 @@ def user_data(request, pk=None):
             'session': session_serializer.data,
             'addresses': address_serializers,
             'payments': payment_serializers,
+            "wishlist": wishlist_serializes.data,
     })
     else:
       return JsonResponse({'error': 'error when get data'}, status=400)

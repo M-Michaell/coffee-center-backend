@@ -1,7 +1,7 @@
 from django.urls import path, include
 from accounts.api.views import ( userIndex, userPaymentIndex, userAddressIndex, 
                                 customUser_resource, userPayment_resource,
-                                  userAddress_resource, wishlist_detail, wishlist_index )
+                                  userAddress_resource, wishlist_index )
 
 # urlpatterns = [
 #
@@ -21,7 +21,7 @@ urlpatterns = [
     path('address/<int:user_id>/', userAddressIndex, name='api.address.index'),
     path('address/<int:user_id>/<int:id>/', userAddress_resource, name='api.userAddress_resource'),
     path('wishlist', wishlist_index, name='wishlistall'),
-    path('wishlist/<int:id>', wishlist_detail, name='wishlist'),
+    # path('wishlist/<int:id>', wishlist_detail, name='wishlist'),
     path('', userIndex, name='api.index'),
     path('<int:id>', customUser_resource, name='api.customUser_resource'),
 

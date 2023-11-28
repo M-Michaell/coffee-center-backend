@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "djoser",
     "rest_framework_simplejwt",
     'rest_framework.authtoken',
+    "wishList.apps.WishlistConfig"
 ]
 
 MIDDLEWARE = [
@@ -155,7 +156,6 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
 
 USE_TZ = True

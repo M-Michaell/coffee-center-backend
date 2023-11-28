@@ -2,8 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from accounts.models import CustomUser, User_Address, User_Payment
 from accounts.api.serializers import CustomUserSerializer, UserAddressSerializer, UserPaymentSerializer
-from accounts.models import Wishlist
-from accounts.api.serializers import WishlistSerializer
+# from accounts.models import Wishlist
 
 
 @api_view(['GET', 'POST'])
@@ -125,22 +124,22 @@ def wishlist_index(request):
         serialized_wishlists = WishlistSerializer(wishlists, many=True)
         return Response({'message': 'Wishlist data received via API', 'Wishlists': serialized_wishlists.data}, status=200)
 
-@api_view(['GET', 'DELETE', 'PUT'])
-def wishlist_detail(request, id):
-    wishlist_item = Wishlist.objects.filter(id=id).first()
+# @api_view(['GET', 'DELETE', 'PUT'])
+# def wishlist_detail(request, id):
+#     wishlist_item = Wishlist.objects.filter(id=id).first()
 
-    if request.method == 'GET':
-        serialized_wishlist_item = WishlistSerializer(wishlist_item)
-        return Response({'message': 'Wishlist item data received via API', 'WishlistItem': serialized_wishlist_item.data}, status=200)
+#     if request.method == 'GET':
+#         serialized_wishlist_item = WishlistSerializer(wishlist_item)
+#         return Response({'message': 'Wishlist item data received via API', 'WishlistItem': serialized_wishlist_item.data}, status=200)
 
-    elif request.method == 'PUT':
-        serialized_wishlist_item = WishlistSerializer(instance=wishlist_item, data=request.data)
-        if serialized_wishlist_item.is_valid():
-            serialized_wishlist_item.save()
-            return Response({'message': 'Wishlist item updated via API', 'WishlistItem': serialized_wishlist_item.data}, status=201)
-        return Response(serialized_wishlist_item.errors, status=400)
+#     elif request.method == 'PUT':
+#         serialized_wishlist_item = WishlistSerializer(instance=wishlist_item, data=request.data)
+#         if serialized_wishlist_item.is_valid():
+#             serialized_wishlist_item.save()
+#             return Response({'message': 'Wishlist item updated via API', 'WishlistItem': serialized_wishlist_item.data}, status=201)
+#         return Response(serialized_wishlist_item.errors, status=400)
 
-    elif request.method == 'DELETE':
-        wishlist_item.delete()
-        return Response({'message': 'Wishlist item deleted via API'}, status=204)
+#     elif request.method == 'DELETE':
+#         wishlist_item.delete()
+#         return Response({'message': 'Wishlist item deleted via API'}, status=204)
     
