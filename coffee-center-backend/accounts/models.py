@@ -21,7 +21,10 @@ class UserAccountManager(BaseUserManager):
         user.is_admin = True
         user.save()
         return user
-
+    
+    def get_all_users(self):
+        return self.get_queryset().all()
+    
 class CustomUser(AbstractBaseUser, PermissionsMixin,SoftDeletionModel):
     username = models.CharField(max_length=100, unique=True)
     first_name = models.CharField(max_length=100)
@@ -85,3 +88,6 @@ class User_Payment(models.Model):
 # class PaymentProvider(models.Model):
 #     name = models.CharField(max_length=100)
 #     description = models.TextField(blank=True)
+class Wishlist(models.Model):
+    user = models.ForeignKey('accounts.CustomUser', on_delete=models.CASCADE)
+    product = models.ForeignKey('product.Product', on_delete=models.CASCADE)
