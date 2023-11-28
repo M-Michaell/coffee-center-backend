@@ -112,12 +112,14 @@ def userPayment_resource(request, id):
 @api_view(['GET', 'POST'])
 def wishlist_index(request):
     if request.method == 'POST':
+        print(request.data)  # Add this line for debugging
         wishlist_serializer = WishlistSerializer(data=request.data)
         if wishlist_serializer.is_valid():
             wishlist_serializer.save()
             return Response({'message': 'Wishlist item added via API', 'Wishlist': wishlist_serializer.data}, status=201)
-        return Response(wishlist_serializer.errors, status=400)
-
+        else:
+            print(wishlist_serializer.errors)  # Add this line for debugging
+            return Response(wishlist_serializer.errors, status=400)
     elif request.method == 'GET':
         wishlists = Wishlist.objects.all()
         serialized_wishlists = WishlistSerializer(wishlists, many=True)

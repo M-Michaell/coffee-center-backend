@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from product.softDeletionModel import SoftDeletionModel
-from product.models import Product
 
 
 class UserAccountManager(BaseUserManager):
@@ -25,7 +24,7 @@ class UserAccountManager(BaseUserManager):
     
     def get_all_users(self):
         return self.get_queryset().all()
-
+    
 class CustomUser(AbstractBaseUser, PermissionsMixin,SoftDeletionModel):
     username = models.CharField(max_length=100, unique=True)
     first_name = models.CharField(max_length=100)
@@ -90,5 +89,5 @@ class User_Payment(models.Model):
 #     name = models.CharField(max_length=100)
 #     description = models.TextField(blank=True)
 class Wishlist(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey('accounts.CustomUser', on_delete=models.CASCADE)
+    product = models.ForeignKey('product.Product', on_delete=models.CASCADE)
