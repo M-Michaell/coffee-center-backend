@@ -2,20 +2,32 @@ from django.db import models
 from accounts.models import CustomUser
 from product.models import Product 
 from product.softDeletionModel import SoftDeletionModel
+from django.utils import timezone
+
+def get_default_expired_at():
+    return timezone.now() + timezone.timedelta(days=1)
+
 
 class OrderDetail(SoftDeletionModel):
     user = models.ForeignKey(CustomUser, null=True, blank=True, on_delete=models.CASCADE, related_name='order_details')
     payment_method = models.OneToOneField('PaymentDetail', null=True, blank=True, on_delete=models.CASCADE, related_name='order_detail')
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
+    expired_at = models.DateTimeField(default=get_default_expired_at, null=True)
+
+    def save(self, *args, **kwargs):
+        if (self.pk and self.expired_at):
+            self.expired_at += timezone.timedelta(days=1)  
+        super().save(*args, **kwargs)  
 
 
     @classmethod
     def get_all_data(cls):
         return cls.objects.all()
-    def delete(self, pk):
-        order =OrderDetail.objects.filter(order=pk)
-        order.soft_delete()
+    
+    def delete(self):
+        self.deleted=True
+        self.soft_delete()
         return "done"
 
 

@@ -17,8 +17,6 @@ from rest_framework import status
 
 class OrderDetailViewSet(ModelViewSet):
     serializer_class = OrderDetailSerializer
-    # def get_queryset(self):
-    #     return OrderDetail.objects.all()
 
     def get_queryset(self):
         user_id = self.request.query_params.get("userID")
@@ -152,7 +150,7 @@ def income(request):
     user = CustomUser.objects.get(id=user)
 
     if user.is_staff != "false":
-        paymentData = PaymentDetail.objects.all()
+        paymentData = PaymentDetail.objects.filter(order_detail__deleted=False)
 
         if startDate and endDate:
             start_date = timezone.datetime.strptime(startDate, "%Y-%m-%d").date()
@@ -164,7 +162,9 @@ def income(request):
 
         paymentsCash = paymentData.filter(provider="cash")
         paymentsPaypal = paymentData.filter(provider="paypal")
-
+        all = [payment.id for payment in paymentsPaypal.filter(status="NP")]
+        print(all)
+        # paymentsPaypal.filter(status="NP")[0].delete()
         paymentData = {
             "cash": {
                 "paid": sum([payment.amount for payment in paymentsCash.filter(status="P")]),
@@ -175,6 +175,10 @@ def income(request):
                 "unpaid": sum([payment.amount for payment in paymentsPaypal.filter(status="NP")]),
             },
         }
+        
 
         return JsonResponse({"income": paymentData})
     return JsonResponse({"income": "bad request"})
+
+
+

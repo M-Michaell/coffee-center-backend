@@ -31,10 +31,17 @@ DEBUG = True
 #     '89be-102-185-0-52.ngrok-free.app',
 # ]
 
+ALLOWED_HOSTS = [
+    '5ede-102-185-34-139.ngrok-free.app',
+    '127.0.0.1'
+    ]
+
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3000",
+    "https://5ede-102-185-34-139.ngrok-free.app",
 ]
+
 
 
 # Application definition
@@ -244,3 +251,5 @@ CORS_ALLOW_CREDENTIALS = True
 
 
 
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  
