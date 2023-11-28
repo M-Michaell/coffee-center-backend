@@ -8,7 +8,6 @@ class ProductSerializer(serializers.ModelSerializer):
     creator_name = serializers.CharField(source='creator.name', read_only=True)
     origin_name = serializers.CharField(source='origin.name', read_only=True)
     roasting_degree_name = serializers.CharField(source='roasting_degree.name', read_only=True)
-    # image = serializers.FileField(max_length=1000000, allow_empty_file=False, write_only=True)
     avg_rate = serializers.DecimalField(max_digits=3, decimal_places=2, read_only=True)
 
     class Meta:

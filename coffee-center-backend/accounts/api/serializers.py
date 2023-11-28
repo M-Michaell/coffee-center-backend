@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import CustomUser, User_Address, User_Payment, Wishlist
+from accounts.models import CustomUser, User_Address, User_Payment
 from product.models import Product
 from rest_framework.validators import UniqueValidator
 from djoser.serializers import UserCreateSerializer
@@ -78,16 +78,16 @@ class UserPaymentSerializer(serializers.Serializer):
       instance.save()
       return instance
     
-class WishlistSerializer(serializers.Serializer):
-    id = serializers.IntegerField(read_only=True)
-    user = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), required=True)
-    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), required=True)
+# class WishlistSerializer(serializers.Serializer):
+#     id = serializers.IntegerField(read_only=True)
+#     user = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), required=True)
+#     product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), required=True)
 
-    def create(self, validated_data):
-        return Wishlist.objects.create(**validated_data)
+#     def create(self, validated_data):
+#         return Wishlist.objects.create(**validated_data)
 
-    def update(self, instance, validated_data):
-        instance.user = validated_data.get('user', instance.user)
-        instance.product = validated_data.get('product', instance.product)
-        instance.save()
-        return instance
+#     def update(self, instance, validated_data):
+#         instance.user = validated_data.get('user', instance.user)
+#         instance.product = validated_data.get('product', instance.product)
+#         instance.save()
+#         return instance
