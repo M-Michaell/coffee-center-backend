@@ -12,8 +12,5 @@ def cancel_old_orders():
     )
 
     for order in orders_to_cancel:
-        print(order.id)
-
         order.delete()
-        order.deleted=True
         print('deleted')

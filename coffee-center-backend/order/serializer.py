@@ -28,6 +28,7 @@ class OrderDetailSerializer(serializers.ModelSerializer):
         write_only=True
     )
     order_items = OrderItemSerializer(many=True, read_only=True)
+    
 
     class Meta:
         model = OrderDetail

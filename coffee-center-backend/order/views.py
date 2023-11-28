@@ -17,8 +17,6 @@ from rest_framework import status
 
 class OrderDetailViewSet(ModelViewSet):
     serializer_class = OrderDetailSerializer
-    # def get_queryset(self):
-    #     return OrderDetail.objects.all()
 
     def get_queryset(self):
         user_id = self.request.query_params.get("userID")
@@ -181,7 +179,6 @@ def income(request):
 
         return JsonResponse({"income": paymentData})
     return JsonResponse({"income": "bad request"})
-
 
 
 
