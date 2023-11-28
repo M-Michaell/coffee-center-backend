@@ -18,8 +18,11 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('auth/', include('djoser.social.urls')),
-    path('address/', userAddressIndex, name='api.address.index'),
-    path('address/<int:id>', userAddress_resource, name='api.userAddress_resource'),
+    path('address/<int:user_id>/', userAddressIndex, name='api.address.index'),
+    path('address/<int:user_id>/<int:id>/', userAddress_resource, name='api.userAddress_resource'),
     path('wishlist/', wishlist_index, name='wishlistall'),
-    path('wishlist/<int:id>', wishlist_detail, name='wishlist')
+    path('wishlist/<int:id>', wishlist_detail, name='wishlist'),
+    path('', userIndex, name='api.index'),
+    path('<int:id>', customUser_resource, name='api.customUser_resource'),
+
 ]
