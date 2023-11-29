@@ -58,10 +58,10 @@ class Discount(SoftDeletionModel):
 
 class Product(SoftDeletionModel):
     name = models.CharField(max_length=50, unique=True)
-    desc = models.TextField(max_length=90)
+    desc = models.TextField()
     image = models.ImageField(upload_to='product/images')
     quantity = models.IntegerField()
-    price = models.DecimalField(max_digits=4, decimal_places=1)
+    price = models.DecimalField(max_digits=6, decimal_places=1)
     discount = models.ForeignKey(Discount, on_delete=models.SET_DEFAULT, default=None, related_name="product_discount", null=True)
     coffee_type = models.ForeignKey(CoffeeType, on_delete=models.CASCADE, related_name="product_coffee_type", null=True, default=None)
     caffeine = models.ForeignKey(Caffeine, on_delete=models.CASCADE, related_name="product_caffeine", null=True, default=None)
