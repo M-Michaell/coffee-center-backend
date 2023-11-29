@@ -81,6 +81,7 @@ class PaymentDetail(SoftDeletionModel):
     total_discount = models.IntegerField()
     total_price = models.IntegerField()
     address_to_send = models.CharField(max_length=100)
+    address_phone = models.CharField(max_length=12,null=True,default=None)
     provider = models.CharField(max_length=50)
     status = models.CharField(max_length=2, choices=status_choices, default='NP')
     tracing = models.CharField(max_length=2, choices=tracking_choices, default='o')
