@@ -108,21 +108,21 @@ def userPayment_resource(request, id):
     userPayment.delete()
     return Response({'message': 'User deleted via api'}, status= 204)
   
-@api_view(['GET', 'POST'])
-def wishlist_index(request):
-    if request.method == 'POST':
-        print(request.data)  # Add this line for debugging
-        wishlist_serializer = WishlistSerializer(data=request.data)
-        if wishlist_serializer.is_valid():
-            wishlist_serializer.save()
-            return Response({'message': 'Wishlist item added via API', 'Wishlist': wishlist_serializer.data}, status=201)
-        else:
-            print(wishlist_serializer.errors)  # Add this line for debugging
-            return Response(wishlist_serializer.errors, status=400)
-    elif request.method == 'GET':
-        wishlists = Wishlist.objects.all()
-        serialized_wishlists = WishlistSerializer(wishlists, many=True)
-        return Response({'message': 'Wishlist data received via API', 'Wishlists': serialized_wishlists.data}, status=200)
+# @api_view(['GET', 'POST'])
+# def wishlist_index(request):
+#     if request.method == 'POST':
+#         print(request.data)  # Add this line for debugging
+#         wishlist_serializer = WishlistSerializer(data=request.data)
+#         if wishlist_serializer.is_valid():
+#             wishlist_serializer.save()
+#             return Response({'message': 'Wishlist item added via API', 'Wishlist': wishlist_serializer.data}, status=201)
+#         else:
+#             print(wishlist_serializer.errors)  # Add this line for debugging
+#             return Response(wishlist_serializer.errors, status=400)
+#     elif request.method == 'GET':
+#         wishlists = Wishlist.objects.all()
+#         serialized_wishlists = WishlistSerializer(wishlists, many=True)
+#         return Response({'message': 'Wishlist data received via API', 'Wishlists': serialized_wishlists.data}, status=200)
 
 # @api_view(['GET', 'DELETE', 'PUT'])
 # def wishlist_detail(request, id):
