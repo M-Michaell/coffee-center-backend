@@ -61,3 +61,63 @@
     "toPay": 900,
     "Shopping_session_id": 1
 }
+
+
+
+{
+    "user": {
+        "username": "shazsh3bn",
+        "first_name": "trial",
+        "last_name": "trialuser",
+        "phone": "+201208124414",
+        "is_staff": False,
+        "id": 2,
+        "email": "shazsh3bn@gmail.com"
+    },
+    "items": [
+        {
+            "product": {
+                "id": 2,
+                "caffeine": 1,
+                "discount": 2,
+                "coffee_type": 1,
+                "creator": 1,
+                "origin": 1,
+                "roasting_degree": 1,
+                "name": "bismillah",
+                "desc": "adsjfnwe aejdn",
+                "image": "/media/product/images/3-removebg-preview_D2wN0wp_8i2b05l.png",
+                "quantity": 11,
+                "price": "123.0",
+                "caffeine_name": "gbghfnghn",
+                "discount_percentage": "32.0",
+                "coffee_type_name": "rgg5th",
+                "creator_name": "fgbgn",
+                "origin_name": "bghn",
+                "deleted": False,
+                "roasting_degree_name": "fgnfg",
+                "created_at": "2023-11-28T04: 59: 55.595860Z",
+                "updated_at": "2023-11-28T04: 59: 55.595872Z",
+                "deleted_at": None,
+                "avg_rate": "0.00"
+            },
+            "quantity": 2
+        }
+    ],
+    "address": {
+        "id": 5,
+        "user": 2,
+        "address_line1": "gjhghg gg8445ghn",
+        "city": "Kafr El Sheikh",
+        "postal_code": "878b",
+        "telephone": "023456789",
+        "mobile": "01208123313"
+    },
+    "payment": {
+        "payment": "cash"
+    },
+    "totalPrice": 246,
+    "totalDiscount": 79,
+    "toPay": 167,
+    "Shopping_session_id": 1
+}

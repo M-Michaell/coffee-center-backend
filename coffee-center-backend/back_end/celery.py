@@ -12,8 +12,8 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 app.conf.beat_schedule = {
     'cancel-old-orders': {
         'task': 'order.tasks.cancel_old_orders',  
-        # 'schedule': crontab(hour=0, minute=0), 
-        'schedule': crontab(minute='*'),
+        'schedule': crontab(hour=0, minute=0), 
+        # 'schedule': crontab(minute='*'),
 
     },
 }

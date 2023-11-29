@@ -48,7 +48,15 @@ def order_detail(request):
     payment.total_price = data["totalPrice"]
     payment.total_discount = data["totalDiscount"]
     payment.provider = data["payment"]["payment"]
-    payment.address_to_send = data["address"]["Address"]
+    
+    address = ''
+    if 'Address' in data['address']:
+        address = data["address"]["Address"]
+    else:
+        address = data['address']['city'] + ' - ' + data['address']['address_line1']
+        payment.address_phone = data['address']['mobile']
+        
+    payment.address_to_send = address
     payment.save()
 
     order = OrderDetail()
