@@ -73,7 +73,11 @@ def order_detail(request):
         weight = int(item['quantity'])
         print(weight)
         print(product_obj.quantity)
-        product_obj.quantity = product_obj.quantity - weight
+        if product_obj.quantity-weight < 0 :
+            product_obj.quantity = 0
+        else:
+            product_obj.quantity = product_obj.quantity - weight
+            
         print(product_obj.quantity)
         product_obj.save()
         product.product = product_obj
