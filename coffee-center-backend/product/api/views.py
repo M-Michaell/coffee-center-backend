@@ -414,7 +414,7 @@ def get_samilar(request):
     product_id=request.GET.get('id')
 
     samilars = Product.objects.filter(
-        origin__name=origin_name,
+        # origin__name=origin_name,
         caffeine__name=caffeine_name,
     ).exclude(id=product_id)[:20]
     serialized_samilars=ProductSerializer(samilars, many=True).data

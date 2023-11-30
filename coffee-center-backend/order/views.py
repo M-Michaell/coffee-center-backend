@@ -70,6 +70,12 @@ def order_detail(request):
         product.order = order
         product.quantity = item["quantity"]
         product_obj = Product.objects.get(id=item["product"]["id"])
+        weight = int(item['quantity'])
+        print(weight)
+        print(product_obj.quantity)
+        product_obj.quantity = product_obj.quantity - weight
+        print(product_obj.quantity)
+        product_obj.save()
         product.product = product_obj
         product.productStaticPrice = product_obj.price
         product.productStaticDiscount = product_obj.discount.percentage
